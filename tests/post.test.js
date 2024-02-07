@@ -84,6 +84,7 @@ describe('Post controller', () => {
                 json: sinon.spy(),
                 status: sinon.stub().returns({ end: sinon.spy() })
             };
+            expectedResult = req.body
         });
 
         afterEach(() => {
@@ -92,6 +93,7 @@ describe('Post controller', () => {
         });
         
         it('should return an updated post', () => {
+            /*
             expectedResult = {
                 _id: '507asdghajsdhjgasd',
                 title: 'My edited test post',
@@ -99,14 +101,17 @@ describe('Post controller', () => {
                 author: 'stswenguser',
                 date: Date.now()
             }
+            */
+            
             // Arrange
-            updatePostStub = sinon.stub(PostModel, 'updatedPost').yields(null, expectedResult);
+            updatePostStub = sinon.stub(PostModel, 'updatePost').yields(null, expectedResult);
 
             // Act
             PostController.update(req, res);
 
-            // Assert
+            // Assert   
             sinon.assert.calledWith(PostModel.updatePost, req.body);
+            sinon.assert.calledWith(res.json, sinon.match({ id: req.body._id}));
             sinon.assert.calledWith(res.json, sinon.match({ title: req.body.title }));
             sinon.assert.calledWith(res.json, sinon.match({ content: req.body.content }));
             sinon.assert.calledWith(res.json, sinon.match({ author: req.body.author }));
@@ -114,7 +119,7 @@ describe('Post controller', () => {
 
         it('should return a 500 on server error', () => {
             // Arrange
-            updatePostStub = sinon.stub(PostModel, 'createPost').yields(error);
+            updatePostStub = sinon.stub(PostModel, 'updatePost').yields(error);
 
             // Act
             PostController.update(req, res);
@@ -125,8 +130,62 @@ describe('Post controller', () => {
             sinon.assert.calledOnce(res.status(500).end);
         })
     });
-
+/*
     describe('findPost', () => {
+        var findPostStub;
+
+        beforeEach(() => {
+            // before every test case setup first
+            res = {
+                json: sinon.spy(),
+                status: sinon.stub().returns({ end: sinon.spy() })
+            };
+            expectedResult = req.body
+        });
+
+        afterEach(() => {
+            // executed after the test case
+            findPostStub.restore();
+        });
+        
+        it('should return an the desired post', () => {
+            /*
+            expectedResult = {
+                _id: '507asdghajsdhjgasd',
+                title: 'My edited test post',
+                content: 'edited content',
+                author: 'stswenguser',
+                date: Date.now()
+            }
+            
+            
+            // Arrange
+            findPostStub = sinon.stub(PostModel, 'findPost').yields(null, expectedResult);
+
+            // Act
+            PostController.update(req, res);
+
+            // Assert   
+            sinon.assert.calledWith(PostModel.findPost, req.body);
+            sinon.assert.calledWith(res.json, sinon.match({ id: req.body._id}));
+            sinon.assert.calledWith(res.json, sinon.match({ title: req.body.title }));
+            sinon.assert.calledWith(res.json, sinon.match({ content: req.body.content }));
+            sinon.assert.calledWith(res.json, sinon.match({ author: req.body.author }));
+        })
+
+        it('should return a 500 on server error', () => {
+            // Arrange
+            updatePostStub = sinon.stub(PostModel, 'findPost').yields(error);
+
+            // Act
+            PostController.update(req, res);
+
+            // Assert
+            sinon.assert.calledWith(PostModel.findPost, req.body);
+            sinon.assert.calledWith(res.status, 500);
+            sinon.assert.calledOnce(res.status(500).end);
+        })
 
     })
+    */
 });

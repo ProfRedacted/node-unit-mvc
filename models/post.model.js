@@ -17,3 +17,9 @@ exports.createPost = (obj, next) => {
         next(err, post)
     }) 
 }
+
+  exports.updatePost = (id, next) => {
+    Post.findByIdAndUpdate(id).populate('author', 'name').exec((err, post) => {
+        next(err, post);
+      });
+  };
