@@ -23,3 +23,9 @@ exports.createPost = (obj, next) => {
         next(err, post);
       });
   };
+
+exports.findPost = async (id, next) => {
+  Post.findById(id).exec((err, post) => {
+    next(err, post)
+  })
+}

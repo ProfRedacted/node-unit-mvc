@@ -24,12 +24,18 @@ PostController.update = (req, res) => {
 
 };
 
-PostController.findPost = (req, res) => {
-
+PostController.find = (req, res) => {
+    return PostModel.findPost(req.body, (err, post) => {
+        if (err) {
+            return res.status(500).end()
+        } else {
+            return res.json(post)
+        }
+    })
 };
 
 PostController.getAllPosts = (req, res) => {
-
+    
 };
 
 module.exports = PostController;

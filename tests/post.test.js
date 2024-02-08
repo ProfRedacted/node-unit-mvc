@@ -93,15 +93,6 @@ describe('Post controller', () => {
         });
         
         it('should return an updated post', () => {
-            /*
-            expectedResult = {
-                _id: '507asdghajsdhjgasd',
-                title: 'My edited test post',
-                content: 'edited content',
-                author: 'stswenguser',
-                date: Date.now()
-            }
-            */
             
             // Arrange
             updatePostStub = sinon.stub(PostModel, 'updatePost').yields(null, expectedResult);
@@ -115,6 +106,8 @@ describe('Post controller', () => {
             sinon.assert.calledWith(res.json, sinon.match({ title: req.body.title }));
             sinon.assert.calledWith(res.json, sinon.match({ content: req.body.content }));
             sinon.assert.calledWith(res.json, sinon.match({ author: req.body.author }));
+
+            console.log()
         })
 
         it('should return a 500 on server error', () => {
@@ -130,7 +123,7 @@ describe('Post controller', () => {
             sinon.assert.calledOnce(res.status(500).end);
         })
     });
-/*
+
     describe('findPost', () => {
         var findPostStub;
 
@@ -149,21 +142,12 @@ describe('Post controller', () => {
         });
         
         it('should return an the desired post', () => {
-            /*
-            expectedResult = {
-                _id: '507asdghajsdhjgasd',
-                title: 'My edited test post',
-                content: 'edited content',
-                author: 'stswenguser',
-                date: Date.now()
-            }
-            
-            
+
             // Arrange
             findPostStub = sinon.stub(PostModel, 'findPost').yields(null, expectedResult);
 
             // Act
-            PostController.update(req, res);
+            PostController.find(req, res);
 
             // Assert   
             sinon.assert.calledWith(PostModel.findPost, req.body);
@@ -178,7 +162,7 @@ describe('Post controller', () => {
             updatePostStub = sinon.stub(PostModel, 'findPost').yields(error);
 
             // Act
-            PostController.update(req, res);
+            PostController.find(req, res);
 
             // Assert
             sinon.assert.calledWith(PostModel.findPost, req.body);
@@ -187,5 +171,5 @@ describe('Post controller', () => {
         })
 
     })
-    */
+
 });
