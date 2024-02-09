@@ -27,5 +27,12 @@ exports.createPost = (obj, next) => {
 exports.findPost = async (id, next) => {
   Post.findById(id).exec((err, post) => {
     next(err, post)
-  })
+  });
+};
+
+exports.getThePosts = async (id, next) => {
+  await Post.findById(id).exec((err, post) => {
+    next(err, post)
+  });
 }
+

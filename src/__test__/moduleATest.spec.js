@@ -159,13 +159,61 @@ describe('Post controller', () => {
 
         it('should return a 500 on server error', () => {
             // Arrange
-            updatePostStub = sinon.stub(PostModel, 'findPost').yields(error);
+            findPostStub = sinon.stub(PostModel, 'findPost').yields(error);
 
             // Act
             PostController.find(req, res);
 
             // Assert
             sinon.assert.calledWith(PostModel.findPost, req.body);
+            sinon.assert.calledWith(res.status, 500);
+            sinon.assert.calledOnce(res.status(500).end);
+        })
+
+    })
+
+    describe('getAllPosts', () => {
+        var getAllPostStub;
+
+        beforeEach(() => {
+            // before every test case setup first
+            res = {
+                json: sinon.spy(),
+                status: sinon.stub().returns({ end: sinon.spy() })
+            };
+            expectedResult = req.body
+        });
+
+        afterEach(() => {
+            // executed after the test case
+            getAllPostStub.restore();
+        });
+        
+        it('should return an the desired post', () => {
+
+            // Arrange
+            getAllPostStub = sinon.stub(PostModel, 'getThePosts').yields(null, expectedResult);
+
+            // Act
+            PostController.getAllPosts(req, res);
+
+            // Assert   
+            sinon.assert.calledWith(PostModel.getThePosts, req.body);
+            sinon.assert.calledWith(res.json, sinon.match({ id: req.body._id}));
+            sinon.assert.calledWith(res.json, sinon.match({ title: req.body.title }));
+            sinon.assert.calledWith(res.json, sinon.match({ content: req.body.content }));
+            sinon.assert.calledWith(res.json, sinon.match({ author: req.body.author }));
+        })
+
+        it('should return a 500 on server error', () => {
+            // Arrange
+            getAllPostStub = sinon.stub(PostModel, 'getThePosts').yields(error);
+
+            // Act
+            PostController.getAllPosts(req, res);
+
+            // Assert
+            sinon.assert.calledWith(PostModel.getThePosts, req.body);
             sinon.assert.calledWith(res.status, 500);
             sinon.assert.calledOnce(res.status(500).end);
         })
